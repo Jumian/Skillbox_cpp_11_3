@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 bool isIpNumber(std::string str){
-    if (str[0]=='0'&&str.length()>1||str=="")return false;
+    if (str[0]=='0'&&str.length()>1||str.empty())return false;
     int multi = 1,ip=0;
     for (int i=str.length()-1; i>=0;i--){
         if (str[i]>'9' || str[i]<'0') return false;
@@ -12,46 +12,49 @@ bool isIpNumber(std::string str){
     return true;
 }
 std::string get_address_part(std::string str, int index){
-
     std::string number="";
-    int start=0, stop=0,seq=0;
-    for (int i =0;i<str.length();++i){
-
-        if(str.find('.',start)!=-1){
-
-            stop = str.find('.',start+1);
-        } else {
-            stop = str.length()-1;
-            break;
-        }
-
-        std::cout <<(char)(start+'0') << " - " <<(char)(stop+'0') << std::endl;
-//        start++;
+    int seq=0;
+    for (int i =0;i<str.length();i++){
+        if(str[i]=='.'){
+            if (seq>=index) break;
+            ++seq;
+        } else if (seq == index )
+            number+=str[i];
+        else if (i==str.length()-1) number = "e";
     }
-    for (int i=start;i<=stop;++i){
-        number+=str[i];
-    }
+//    std::cout << start << " - " << stop << std::endl;
 
     return number;
 }
 
 bool isValidIp(std::string ip){
-
-
-    for (int i=0; i<4;i++){
-        if (!isIpNumber(get_address_part(ip,i))) return false;
+    for (int ii=0; ii<4;ii++){
+        if (!isIpNumber(get_address_part(ip,ii))) return false;
     }
+    if (get_address_part(ip,4) != "e")
+        return false;
     return true;
 }
 
 void test(std::string ipstr){
     std::cout << ipstr << std::endl;
-    std::cout << (isValidIp(ipstr)?"Valid":"Invalid");
+    std::cout << (isValidIp(ipstr)?"Valid":"Invalid") << std::endl;
 }
 
 int main() {
     std::cout << "Validate IPv4:" << std::endl;
-    std::cout << (isIpNumber("")?"Valid":"Invalid") << std::endl;
-    std::cout << (std::string)get_address_part("192.168.1.254",2) << std::endl;
+   test("192.168.1.254");
+    test("255.255.255.255");
+    test("1.2.3.4");
+    test("55.77.213.101");
+    std::cout << "\nInvalidate IPv4:" << std::endl;
+    test("255.256.257.258");
+    test("0.55.33.22.");
+    test("10.00.000.0 ");
+    test("23.055.255.033");
+    test("65.123..9");
+    test("a.b.c.d");
+
+
     return 0;
 }
