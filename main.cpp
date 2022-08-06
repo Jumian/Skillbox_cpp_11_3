@@ -40,21 +40,26 @@ void test(std::string ipstr){
     std::cout << ipstr << std::endl;
     std::cout << (isValidIp(ipstr)?"Valid":"Invalid") << std::endl;
 }
-
-int main() {
-    std::cout << "Validate IPv4:" << std::endl;
-   test("192.168.1.254");
+void all_tests(){
+    std::cout << "Valid IPv4:" << std::endl;
+    test("192.168.1.254");
     test("255.255.255.255");
     test("1.2.3.4");
     test("55.77.213.101");
-    std::cout << "\nInvalidate IPv4:" << std::endl;
+    std::cout << "\nInvalid IPv4:" << std::endl;
     test("255.256.257.258");
     test("0.55.33.22.");
     test("10.00.000.0 ");
     test("23.055.255.033");
     test("65.123..9");
     test("a.b.c.d");
+}
 
+int main() {
+    std::string str;
+    std::cin >>str;
+    test(str);
+//    all_tests();
 
     return 0;
 }
